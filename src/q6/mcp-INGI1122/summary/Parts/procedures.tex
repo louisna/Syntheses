@@ -7,7 +7,7 @@ Le bénéfice de l'abstraction est la \textbf{modularité} qui est composée de 
 \subsubsection{Déclaration de procédure}
 La déclaration d'une procédure est composée d'un \textbf{nom} $F$ (l'identifiant), des \textbf{paramètres} $V_1,...V_n$ (les variables), des \textbf{spécifications} $P_F,Q_F$ (les assertions) et du corps $S$ (l'instruction). Les spécifications ($P_F,Q_F$) respectent l'abstraction en termes de l'interface de $F$ avec ses paramètres et son résultat, contrairement aux variables locales dans $S$.\\
 
-$\bullet$\textbf{Typage}: les types sont des spécifications supportées dans le langage. Le Type-checking vérifier que les variables et résultats sont du bon type.
+$\bullet$\textbf{Typage}: les types sont des spécifications supportées dans le langage. Le Type-checking vérifie que les variables et résultats sont du bon type.
 \\
 
 $\bullet$\textbf{Paramètres et résultats multiples}: en général, une procédure peut avoir plusieurs paramètres et retourner plusieurs résultats. Dans la suite, on ne présentera des procédures qu'avec un paramètre et ne retournant qu'un résultat. 
@@ -34,19 +34,19 @@ On décompose:
 
 Une\textbf{ procédure pure} est une procédure qui ne modifie pas les variables non-locales de la procédure. La pré-condition $P_F$ porte uniquement sur les paramètres $V_1,...,V_n$ et la post-condition $Q_F$ porte uniquement sur les paramètres  $V_1,...,V_n$ non modifiées et le résultat $result$.\\
 
-Pour une procédure pure $procedure F(V) \quad pre \quad P_F \quad post \quad Q_F \quad {S}$, si on a prouvé $[P_F] S [Q_F]$ alors on peut remplacer:\\
+Pour une procédure pure $procedure F(V) \quad pre \quad P_F \quad post \quad Q_F \quad \{S\}$, si on a prouvé $[P_F] S [Q_F]$ alors on peut remplacer:\\
 $U:=F(E);$\\
 par : $assert \quad P_F[E/V]; \quad assume \quad Q_F[E/V,U/result];$\\
 
 $\bullet$\textbf{Règle de la procédure pure}:\\
 
-Pour une procédure $F(V) {S}$\\
+Pour une procédure $F(V) \{S\}$\\
 Si $\quad  [P_F]S[Q_F]$\\
 Alors $[P_F[E/V]]U:=F(E);[Q_F[E/V,U/result]]$\\
 
 ou de manière équivalente\\
 
-Pour une procédure $F(V) {S}$\\
+Pour une procédure $F(V) \{S\}$\\
 Si $\quad  [P_F[V]]S[Q_F[V,result]]$\\
 Alors $[P_F[E]]U:=F(E);[Q_F[E,U]]$\\
 \subsection{Procédures avec effets}
@@ -55,17 +55,17 @@ Les procédures avec effets sont des procédures non-pures et donc peuvent modif
 $\bullet$ \textbf{Définition}: procedure F(V) pre $P_F$ post $Q_F$ modifies V \{S\}\\
 La valeur de V est différente à l'entrée et à la sortie de S.\\
 
-Pour une procédure avec effet $procedure F(V) \quad pre \quad P_F \quad post \quad Q_F \quad modifies \quad V \quad {S}$, si on a prouvé $[P_F] S [Q_F]$ alors on peut remplacer:\\
+Pour une procédure avec effet $procedure F(V) \quad pre \quad P_F \quad post \quad Q_F \quad modifies \quad V \quad \{S\}$, si on a prouvé $[P_F] S [Q_F]$ alors on peut remplacer:\\
 $U:=F(A);$ avec A une variable\\
-par : $assert \quad P_F[E/V]; \quad A:= a_1; \quad assume \quad Q_F[E/V,U/result];$\\
+par : $assert \quad P_F[A/V]; \quad A:= a_1; \quad assume \quad Q_F[A/V,U/result];$\\
 avec $a_1 \equiv$ la valeur de A à la sortie de S.\\
 
 $\bullet$\textbf{Règle de la procédure avec effet}:\\
 
-Pour une procédure avec effet $F(V) {S}$\\
+Pour une procédure avec effet $F(V) \{S\}$\\
 Si $\quad  [P_F]S[Q_F]$\\
 Alors $[P[A/V]]U:=F(A);[Q[A/V,U/result]]$\\
-C'est pareil que pour la procédure pure saud que A est une variable passée par référence dont la valeur diffère entre P et Q. \vfill
+C'est pareil que pour la procédure pure sauf que A est une variable passée par référence dont la valeur diffère entre P et Q. \vfill
 
 \subsection{Procédures récursives}
 On suppose les appels corrects et on prouve le corps correct.
@@ -73,11 +73,11 @@ Pour prouver la terminaison, on définit un variant sur les paramètres de la pr
 procedure F(V) pre $P_F$ post $Q_F$ variant $Z_F$ \{S\}\\
 
 $\bullet$\textbf{Règle de la procédure récursive}:\\
-Pour une procédure $F(V) {S}$\\
+Pour une procédure $F(V) \{S\}$\\
 Si $\quad$ si $ \quad [P_F[E/V] \wedge Z[E/V]<z_0] U :=F(E); [Q_F[E/V,U/result]] $\\ 
 $.\quad \quad $alors $[P_F \wedge Z=z_0]S[Q_F]$\\
 Alors $[P_F] S[Q_F]$\\
 Et donc $[P_F[E/V]]U:=F(E);[Q_F[E/V,U/result]]$\\
 
-Pour une procédure récursive $F(V)$ pre $P_F$ post $Q_F$ variant $Z_F$ ${S}$\\
+Pour une procédure récursive $F(V)$ pre $P_F$ post $Q_F$ variant $Z_F$ $\{S\}$\\
 Dans la preuve de $[P_F \wedge Z=z_0] S[Q_F]$, on peut remplacer les appels récursifs  $F(E)$ par\\  $assert \quad P_F[E/V] \wedge Z[E/V]<z_0; \quad assume \quad Q_F[E/V,U/result];$\\
